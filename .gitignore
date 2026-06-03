@@ -1,0 +1,38 @@
+# User requested ignores
+Task Assessment  - Founding Engineer  (Phoenix Labs) (2).pdf
+*.pdf
+tech.md
+test_hmac.py
+test_tools.py
+
+# Environments
+.env
+.env.*
+**/venv/
+venv/
+ENV/
+env/
+
+# Python cache & build files
+**/__pycache__/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.pyre/
+.pytype/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDEs and editors
+.idea/
+.vscode/
+*.swp
+*.swo
