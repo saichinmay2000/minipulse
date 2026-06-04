@@ -186,7 +186,6 @@ pytest tests/ -v
 ## What I would do with more time
 
 - **Redis context store** with per-thread TTL (24 hours) so restarts don't lose history and the adapter can scale horizontally
-- **OpenTelemetry spans** wrapping each tool call and LLM invocation — already have `duration_ms` in structured logs, spans would give trace-level visibility
 - **Dynamic stage ID resolution** — fetch pipeline config from HubSpot at startup instead of hardcoding the map
 - **Owner name resolution** — the `search_deals` owner filter currently does client-side matching against owner IDs (not names) because resolving names requires a separate `/owners` API call per deal. A small owner cache at startup would fix this
 - **`/healthz` that actually checks dependencies** — current healthz just returns `ok`. Production version should ping HubSpot and the Anthropic API and return degraded status if either is unreachable
