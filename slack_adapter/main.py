@@ -16,8 +16,8 @@ import context_store
 
 load_dotenv()
 
-SLACK_SIGNING_SECRET = os.environ["SLACK_SIGNING_SECRET"]
-SLACK_BOT_TOKEN = os.environ["SLACK_BOT_TOKEN"]
+SLACK_SIGNING_SECRET = os.getenv("SLACK_SIGNING_SECRET", "")
+SLACK_BOT_TOKEN = os.getenv("SLACK_BOT_TOKEN", "")
 AI_SERVICE_URL = os.getenv("AI_SERVICE_URL", "http://localhost:8001")
 
 structlog.configure(
@@ -27,6 +27,11 @@ structlog.configure(
     ]
 )
 log = structlog.get_logger()
+
+if not SLACK_SIGNING_SECRET:
+    log.warning("startup_warning", reason="SLACK_SIGNING_SECRET environment variable is missing or empty. Slack signature verification will fail.")
+if not SLACK_BOT_TOKEN:
+    log.warning("startup_warning", reason="SLACK_BOT_TOKEN environment variable is missing or empty. Posting messages to Slack will fail.")
 
 app = FastAPI(title="MiniPulse Slack Adapter")
 

@@ -5,10 +5,10 @@ services:
     build: ./slack_adapter
     ports:
       - "8000:8000"
-    env_file:
-      - ./slack_adapter/.env
     environment:
-      AI_SERVICE_URL: http://ai-service:8001
+      - SLACK_SIGNING_SECRET=${SLACK_SIGNING_SECRET:-}
+      - SLACK_BOT_TOKEN=${SLACK_BOT_TOKEN:-}
+      - AI_SERVICE_URL=http://ai-service:8001
     depends_on:
       - ai-service
     restart: unless-stopped
@@ -17,6 +17,8 @@ services:
     build: ./ai_service
     ports:
       - "8001:8001"
-    env_file:
-      - ./ai_service/.env
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - HUBSPOT_TOKEN=${HUBSPOT_TOKEN:-}
+      - NIRIXA_API_KEY=${NIRIXA_API_KEY:-}
     restart: unless-stopped

@@ -6,3 +6,4 @@ structlog==24.1.0
 pydantic==2.7.1
 anthropic==0.28.0
 nirixa==2.3.0
+pytest==8.2.1

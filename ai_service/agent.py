@@ -31,7 +31,12 @@ load_dotenv()
 log = structlog.get_logger()
 
 # Initialize tracker
-nirixa.init(api_key=os.environ["NIRIXA_API_KEY"])
+nirixa_key = os.getenv("NIRIXA_API_KEY", "")
+if nirixa_key:
+    nirixa.init(api_key=nirixa_key)
+else:
+    log.warning("startup_warning", reason="NIRIXA_API_KEY environment variable is missing or empty. Nirixa tracking is disabled.")
+    nirixa.init(api_key="dummy_nirixa_key")
 
 
 SYSTEM_PROMPT = """You are MiniPulse, a helpful assistant for a sales team. You answer questions about HubSpot CRM data.
@@ -154,8 +159,14 @@ def run_agent(messages: list[dict], request_id: str) -> str:
     messages: list of {role, content} dicts (the full thread history)
     request_id: for structured log correlation
     """
-    client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
-    hubspot_token = os.environ["HUBSPOT_TOKEN"]
+    anthropic_key = os.getenv("ANTHROPIC_API_KEY", "")
+    hubspot_token = os.getenv("HUBSPOT_TOKEN", "")
+
+    if not anthropic_key or not hubspot_token:
+        log.error("agent_config_error", error="Missing API keys (ANTHROPIC_API_KEY or HUBSPOT_TOKEN)")
+        return "I'm sorry, the AI service is not fully configured (missing API keys)."
+
+    client = anthropic.Anthropic(api_key=anthropic_key)
 
     # We pass messages directly — history already includes all prior turns
     loop_messages = list(messages)
